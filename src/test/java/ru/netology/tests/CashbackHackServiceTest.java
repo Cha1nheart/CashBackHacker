@@ -5,7 +5,7 @@ import ru.netology.service.CashbackHackService;
 public class CashbackHackServiceTest {
 
     @org.testng.annotations.Test
-    public void shouldCalcAverage() {
+    public void shouldCalcAverage() { /* Позитивный тест для среднего значения */
         CashbackHackService service = new CashbackHackService();
         int amount = 500;
         int expected = 500;
@@ -15,37 +15,17 @@ public class CashbackHackServiceTest {
     }
 
     @org.testng.annotations.Test
-    public void shouldCalcZero() {
-        CashbackHackService service = new CashbackHackService();
-        int amount = 0;
-        int expected = 1000;
-        int actual = service.remain(amount);
-
-        org.testng.Assert.assertEquals(actual, expected);
-    }
-
-    @org.testng.annotations.Test
-    public void shouldCalcNegativeNumbers() {
-        CashbackHackService service = new CashbackHackService();
-        int amount = -1;
-        int expected = 1001;
-        int actual = service.remain(amount);
-
-        org.testng.Assert.assertEquals(actual, expected);
-    }
-
-    @org.testng.annotations.Test
-    public void shouldCalcThreshold() {
-        CashbackHackService service = new CashbackHackService();
+    public void shouldNotCalcThreshold() { /* При покупке на сумму граничного значения кешбэк уже начислен: */
+        CashbackHackService service = new CashbackHackService(); /* сервис не должен советовать докупать */
         int amount = 1000;
-        int expected = 1000;
+        int expected = 0;
         int actual = service.remain(amount);
 
         org.testng.Assert.assertEquals(actual, expected);
     }
 
     @org.testng.annotations.Test
-    public void shouldCalcBellowThreshold() {
+    public void shouldCalcBellowThreshold() { /* Позитивная проверка граничного значения суммы покупки */
         CashbackHackService service = new CashbackHackService();
         int amount = 999;
         int expected = 1;
@@ -55,13 +35,31 @@ public class CashbackHackServiceTest {
     }
 
     @org.testng.annotations.Test
-    public void shouldCalcAboveThreshold() {
-        CashbackHackService service = new CashbackHackService();
+    public void shouldNotCalcAboveThreshold() { /* При покупке на сумму выше граничного значения кешбэк уже начислен: */
+        CashbackHackService service = new CashbackHackService(); /* сервис не должен советовать докупать */
         int amount = 1001;
-        int expected = 999;
+        int expected = 0;
         int actual = service.remain(amount);
 
         org.testng.Assert.assertEquals(actual, expected);
+    }
+
+//    Тесты для проверки суммы покупки
+
+    @org.testng.annotations.Test
+    public void shouldNotAcceptZeroForAmount() { /* Сумма покупки не должна быть равна нулю */
+        CashbackHackService service = new CashbackHackService(); /* Тест упадет: нет условий для переменной "amount" */
+        int amount = 0;
+
+        org.testng.Assert.assertEquals(service.remain(amount), false);
+    }
+
+    @org.testng.annotations.Test
+    public void shouldNotAcceptNegativeNumbersForAmount() { /* Сумма покупки не должна быть отрицательной */
+        CashbackHackService service = new CashbackHackService(); /* Тест упадет: нет условий для переменной "amount" */
+        int amount = -1;
+
+        org.testng.Assert.assertEquals(service.remain(amount), false);
     }
 
 }
